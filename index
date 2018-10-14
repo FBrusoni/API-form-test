@@ -20,6 +20,7 @@
 	    select {
 		padding:0 10px
 	    }
+
 	    .jumbotron {
 		background:#3e4678;
 		text-align: center;
@@ -57,6 +58,11 @@
 		text-align:center;
 		color: #fff;
 		background:red
+	    }
+	    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+		select {
+		    padding:9px
+		}
 	    }
 	</style>
     </head>
