@@ -1,0 +1,175 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Data Capture Form</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style>
+	    body {
+		background:#f2f2f2;
+	    }
+	    .notShown,.welcomeText,.error {
+		display: none;
+	    }
+	    input, option, select {
+		width:100%;
+		margin-bottom:5px;
+		padding:10px
+	    }
+	    select {
+		padding:0 10px
+	    }
+	    .jumbotron {
+		background:#3e4678;
+		text-align: center;
+		color:#fff;
+		text-transform: uppercase;
+		border-radius: 0
+	    }
+	    .jumbotron h1 {
+		font-size:2em
+	    }
+	    input[type=submit] {
+		background: #7df2f2;
+		border: none;
+		color: #000;
+		font-weight: bold;
+		font-size: 1.3em;
+		box-shadow: 1px 2px 1px #cbcbcb;
+		cursor: pointer;
+	    }
+	    .welcomeText {
+		text-align: center;
+		font-weight: bold;
+		font-size: 1.2em;
+		margin-top: 5%;
+		border: 4px double #3e4678;
+		padding: 10px 0;
+	    }
+	    .welcomeText span {
+		font-weight: bold;
+		color:#3e4678
+	    }
+	    .error {
+		width:100%;
+		padding:2px 0;
+		text-align:center;
+		color: #fff;
+		background:red
+	    }
+	</style>
+    </head>
+    <body>
+	<div class='jumbotron'>
+	    <h1>
+		Subscribe to our service
+	    </h1>
+	</div>
+	<div class='container'>
+	    <div class='row'>
+		<div class="col-md-offset-1 col-md-5 col-sm-12">
+		    <form  id='formEntry' method="post">
+			<div class='error'>
+			    Sorry, we couldn't process your request. Please try again.
+			</div>
+			<div class="form-group row">
+			    <div class='col-lg-4'>
+				<select name="title" class='js_select' data-custom="Other">
+				    <option value="Mr" selected>Mr</option>
+				    <option value="Mrs">Mrs</option>
+				    <option value="Ms">Ms</option>
+				    <option value="Other">Other</option>
+				</select> 
+			    </div>
+			    <div class='col-lg-8 notShown'>
+				<input type="text" name="title" placeholder="Please specify" id="title" class="title" />
+			    </div>
+			    <div class='col-lg-8 elastic'>
+				<input type="text" required name="firstName" placeholder="First name*" />
+			    </div>
+
+			    <div class='col-lg-12'>
+				<input type="text" required name="lastName" placeholder="Last name*"  class='col-xs-12'/>
+				<input type="email" required name="email" placeholder="E-mail*"  class='col-xs-12'/>
+				<input type="tel" name="tel" placeholder="Mobile Number" pattern="^\+?(44)?(0|7)\d{9,13}$"  class='col-xs-12'/>
+			    </div>
+			    <div class='col-lg-12'>
+				<label for="cType">Customer Type *</label>
+				<select name="cType" class='js_select' data-custom="Business">
+				    <option value="Personal" selected>Personal</option>
+				    <option value="Business">Business</option>
+				</select> 
+			    </div>
+			    <div class='col-lg-12 notShown'>
+				<input type="text" name="companyName" placeholder="Company name" class="businessName" />	
+			    </div>
+			</div>
+			<input type="submit" value="SUBMIT DATA "/> 
+		    </form>
+		    <div class='welcomeText'>
+			Thank you, <span></span>, <br/>
+			you registered successfully!
+		    </div>
+		</div>
+		<div class='col-md-5'>
+		    <h2>Lorem ipsum</h2>
+		    <p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non congue est. Aliquam varius felis odio, ac vestibulum lectus interdum eu. Aliquam lobortis quam nibh, eu lobortis dolor facilisis non. Praesent pharetra eros ac facilisis viverra. Donec luctus efficitur lacus id efficitur. Vestibulum diam dui, mollis non eleifend at, volutpat a quam. Cras dui mauris, auctor sit amet vestibulum vitae, ultrices in neque. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+		</div>
+	    </div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var selectedValue;
+
+                $(".js_select").on("change", function () {
+                    selectedValue = $(this).val();
+                    var customInputFieldTrigger = $(this).data("custom");
+                    var customInputField = $(this).parent().next("div");
+                    var elasticDiv = customInputField.next();
+
+                    if (selectedValue == customInputFieldTrigger) {
+                        customInputField.show();
+                        elasticDiv.removeClass("col-lg-8").addClass("col-lg-12");
+                    } else {
+                        customInputField.hide();
+                        elasticDiv.removeClass("col-lg-12").addClass("col-lg-8");
+                    }
+                });
+
+                $("#formEntry").submit(function (e) {
+                    e.preventDefault();
+                    var fName = $("input[name=firstName]").val();
+                    var title;
+                    if (selectedValue == "Other") {
+                        title = $("input[name=title]").val();
+                    } else {
+                        title = $("select[name=title]").val();
+                    }
+                    var welcomeText = title + " " + fName;
+
+                    data = $(this).serialize();
+                    console.log(data);
+                    $.ajax({
+                        url: 'http://jsonplaceholder.typicode.com/posts',
+                        method: 'POST',
+                        data: data,
+                        success: function () {
+                            $("#formEntry").slideUp();
+                            $(".welcomeText").slideDown();
+                            $(".welcomeText span").text(welcomeText);
+                        },
+                        error: function (error) {
+                            $(".error").slideDown();
+                            setTimeout(function () {
+                                $(".error").slideUp();
+                            }, 3000);
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
